@@ -1,7 +1,10 @@
 package com.project.projectBook.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.projectBook.dto.BookDto;
 import com.project.projectBook.model.User;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -22,7 +26,9 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
+
     private Collection<? extends GrantedAuthority> authorities;
+
 
     public UserDetailsImpl(Long id, String username, String email,
                            String password,

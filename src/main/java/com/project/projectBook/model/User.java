@@ -41,6 +41,17 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY,
+    cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
+    @JoinTable(name = "user_books",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> books = new HashSet<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Comment> comments = new HashSet<>();
@@ -98,6 +109,16 @@ public class User {
         this.roles = roles;
     }
 
+    @JsonIgnore
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+
+
     public Set<Comment> getComments() {
         return comments;
     }
@@ -113,4 +134,11 @@ public class User {
     public void setReacts(Set<React> reacts) {
         this.reacts = reacts;
     }
+
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.getUsers().add(this);
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.project.projectBook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +29,9 @@ public class Book {
     @Column(name="sold")
     private Integer sold;
 
+    @Column(name = "img")
+    private String imgBook;
+
     @ManyToMany(fetch = FetchType.LAZY,
         cascade = {
             CascadeType.MERGE,
@@ -38,6 +43,16 @@ public class Book {
             inverseJoinColumns = {@JoinColumn(name = "genre_id")}
     )
     private Set<Genre> genres = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,
+        cascade = {
+            CascadeType.MERGE,
+                CascadeType.PERSIST
+        },
+            mappedBy = "books"
+    )
+    @JsonIgnore
+    private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
@@ -104,12 +119,28 @@ public class Book {
         this.sold = sold;
     }
 
+    public String getImgBook() {
+        return imgBook;
+    }
+
+    public void setImgBook(String imgBook) {
+        this.imgBook = imgBook;
+    }
+
     public Set<Genre> getGenres() {
         return genres;
     }
 
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     public Set<Comment> getComments() {
