@@ -42,6 +42,9 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private Set<React> reacts = new HashSet<>();
+
     public Book() {
     }
 
@@ -115,6 +118,14 @@ public class Book {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<React> getReacts() {
+        return reacts;
+    }
+
+    public void setReacts(Set<React> reacts) {
+        this.reacts = reacts;
     }
 
     public void addgenre(Genre genre) {

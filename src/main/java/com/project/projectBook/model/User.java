@@ -45,6 +45,10 @@ public class User {
     @JsonIgnore
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<React> reacts = new HashSet<>();
+
     public User() {
     }
 
@@ -100,5 +104,13 @@ public class User {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<React> getReacts() {
+        return reacts;
+    }
+
+    public void setReacts(Set<React> reacts) {
+        this.reacts = reacts;
     }
 }
