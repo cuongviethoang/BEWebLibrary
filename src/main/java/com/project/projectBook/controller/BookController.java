@@ -28,6 +28,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    // http://localhost:8082/api/book/{id}
     @GetMapping("/book/{id}")
     public ResponseEntity<Book> getOneBook(@PathVariable(value = "id") Long id ) {
         Book book = bookRepository.findById(id)
