@@ -8,6 +8,7 @@ import com.project.projectBook.payload.response.MessageResponse;
 import com.project.projectBook.repository.BookRepository;
 import com.project.projectBook.repository.ReactRepository;
 import com.project.projectBook.repository.UserRepository;
+import com.project.projectBook.services.ReactService;
 import com.project.projectBook.services.UserDetailsImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,61 +31,25 @@ public class ReactController {
     ReactRepository reactRepository;
 
     @Autowired
-    BookRepository bookRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    ModelMapper modelMapper;
+    ReactService reactService;
 
     // http://localhost:8082/api/book/{id}/reacts
     @GetMapping("/book/{bookId}/reacts")
-    public ResponseEntity<List<ReactDto>> getAllReactOfBook(@PathVariable(value = "bookId") Long bookId) {
-
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = "+ bookId));
-
-        List<ReactDto> reacts = book.getReacts().stream().map((react) -> {
-            ReactDto reactDto = modelMapper.map(react, ReactDto.class);
-            reactDto.setUsername(react.getUser().getUsername());
-            return reactDto;
-        }).collect(Collectors.toList());
-
-        return new ResponseEntity<>(reacts, HttpStatus.OK);
-
-
+    public ResponseEntity<?> getAllReactOfBook(@PathVariable(value = "bookId") Long bookId) {
+        List<ReactDto> reactDtos = reactService.getAllReactOfBook(bookId);
+        return ResponseEntity.ok(reactDtos);
     }
 
     // http://localhost:8082/api/book/{id}/react
     @CrossOrigin
     @PostMapping("/book/{bookId}/react")
-    public ResponseEntity<ReactDto> createReact(Authentication authentication,
+    public ResponseEntity<?> createReact(Authentication authentication,
                                                 @PathVariable(value = "bookId") Long bookId,
                                                 @RequestBody ReactDto reactDto) {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        long userId = userDetails.getId();
-
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = " + bookId));
-
-        React react = new React();
-        react.setUser(userRepository.findById(userId).get());
-        react.setBook(book);
-        react.setVoted(reactDto.getVoted());
-        react.setMessage(reactDto.getMessage());
-        react.setDate(LocalDate.now());
-        LocalTime tm = LocalTime.now();
-        react.setTime(LocalTime.parse(String.format("%02d:%02d:%02d", tm.getHour(), tm.getMinute(), tm.getSecond())));
-
-        reactRepository.save(react);
-
-        reactDto = modelMapper.map(react, ReactDto.class);
-        reactDto.setUsername(userDetails.getUsername());
-
-        return new ResponseEntity<>(reactDto, HttpStatus.OK);
+        reactService.createReactOfBook(userDetails.getId(), bookId, reactDto.getVoted());
+        return ResponseEntity.ok(HttpStatus.OK);
 
     }
 
@@ -95,18 +60,13 @@ public class ReactController {
            @PathVariable(value = "reactId") Long reactId) {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         long userId = userDetails.getId();
-
         React react = reactRepository.findById(reactId).get();
-
         long userID = react.getUser().getId();
-
         if(userID == userId) {
             reactRepository.deleteById(reactId);
             return ResponseEntity.ok(new MessageResponse("Success"));
         }
-
         return ResponseEntity.ok(new MessageResponse("you are not the person who wrote this comment"));
     }
 }

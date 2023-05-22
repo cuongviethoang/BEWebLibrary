@@ -1,11 +1,13 @@
 package com.project.projectBook.controller;
 
 import com.project.projectBook.dto.BookDto;
+import com.project.projectBook.dto.BuyBookDto;
 import com.project.projectBook.exception.ResourceNotFoundException;
 import com.project.projectBook.model.Book;
 import com.project.projectBook.model.User;
 import com.project.projectBook.repository.BookRepository;
 import com.project.projectBook.repository.UserRepository;
+import com.project.projectBook.services.BookService;
 import com.project.projectBook.services.UserDetailsImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +32,14 @@ public class BookController {
     UserRepository userRepository;
 
     @Autowired
-    ModelMapper modelMapper;
+    BookService bookService;
+
+
 
     // http://localhost:8082/api/books
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getAllBooks() {
-        List<Book> books = new ArrayList<Book>();
-
-        bookRepository.findAll().forEach(books::add);
+        List<Book> books = bookService.getAllBook();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
@@ -50,74 +52,41 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
+    // http://localhost:8082/api/books/stats
+    @GetMapping("/books/stats")
+    public ResponseEntity<?> getStatAllBook() {
+        List<BuyBookDto> buyBookDtos = bookService.buyBookDtos();
+        return ResponseEntity.ok(buyBookDtos);
+    }
+
     // http://localhost:8082/api/book
     @PostMapping("/book")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        Book bk = bookRepository.save(new Book(book.getTitle(), book.getAuthor(),
-                book.getReleaseDate(), book.getLength(), 0));
+    public ResponseEntity<?> createBook(@RequestBody Book book) {
+        bookService.createBook(book);
 
-        return new ResponseEntity<>(bk, HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //
     @PutMapping("/book/{id}")
     public ResponseEntity<Book> fixBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
-        Book bk = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found book with id = " + id));
-
-        bk.setTitle(book.getTitle());
-        bk.setAuthor(book.getAuthor());
-        bk.setReleaseDate(book.getReleaseDate());
-        bk.setLength(book.getLength());
-        bk.setSold(bk.getSold());
-
-        bookRepository.save(bk);
+        Book bk = bookService.fixOneBook(id, book);
 
         return new ResponseEntity<>(bk, HttpStatus.OK);
     }
 
     // http://localhost:8082/api/book/sold/{id}
-//    @PostMapping("book/sold/{id}")
-//    public ResponseEntity<BookDto> buyBookOfUser(Authentication authentication,
-//           @PathVariable(value = "id") Long id, @RequestBody BookDto bookDto) {
-//
-//        Book bk = bookRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = " + id));
-//
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        long userId = userDetails.getId();
-//        User user = userRepository.findById(userId).get();
-//
-//        Book book1 = new Book(bk.getTitle(), bk.getAuthor(), bk.getReleaseDate(),
-//                bk.getLength(), bookDto.getSold());
-//        book1.setId(bk.getId());
-//        user.addBook(book1);
-//        userRepository.save(user);
-//
-//        bookDto.setId(bk.getId());
-//        bookDto.setTitle(bk.getTitle());
-//        bookDto.setAuthor(bk.getAuthor());
-//        bookDto.setUserId(userId);
-//        bookDto.setUsername(user.getUsername());
-//
-//        return new ResponseEntity<>(bookDto, HttpStatus.OK);
-//    }
-
-
-
-    // http://localhost:8082/api/book/sold/{id}
-    @PutMapping("/book/sold/{id}")
+    @PutMapping("/book/{id}/sold")
     public ResponseEntity<Book> buyBook( @PathVariable(value = "id") Long id, @RequestBody Book book) {
         Book bk = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = " + id));
 
         bk.setSold(bk.getSold() + book.getSold());
+        bk.setTotalBook(bk.getTotalBook() - book.getSold());
         bookRepository.save(bk);
 
         return new ResponseEntity<>(bk, HttpStatus.OK);
     }
-
-
 
     @DeleteMapping("/book/{id}")
     public ResponseEntity<HttpStatus> deleteBook(@PathVariable(value = "id") Long id) {

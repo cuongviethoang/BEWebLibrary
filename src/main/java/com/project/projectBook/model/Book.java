@@ -3,6 +3,7 @@ package com.project.projectBook.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +33,12 @@ public class Book {
     @Column(name = "img")
     private String imgBook;
 
+    @Column(name = "totalbook")
+    private Integer totalBook;
+
+    @Column(name = "price")
+    private Long price;
+
     @ManyToMany(fetch = FetchType.LAZY,
         cascade = {
             CascadeType.MERGE,
@@ -44,31 +51,29 @@ public class Book {
     )
     private Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-        cascade = {
-            CascadeType.MERGE,
-                CascadeType.PERSIST
-        },
-            mappedBy = "books"
-    )
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<User> users = new HashSet<>();
+    private Set<Bill> bill;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<React> reacts = new HashSet<>();
 
     public Book() {
     }
 
-    public Book(String title, String author, String releaseDate, Integer length, Integer sold) {
+    public Book(String title, String author, String releaseDate, Integer length, Integer sold, Long price, int totalBook) {
         this.title = title;
         this.author = author;
         this.releaseDate = releaseDate;
         this.length = length;
         this.sold = sold;
+        this.price = price;
+        this.totalBook = totalBook;
     }
 
     public Long getId() {
@@ -127,6 +132,22 @@ public class Book {
         this.imgBook = imgBook;
     }
 
+    public Integer getTotalBook() {
+        return totalBook;
+    }
+
+    public void setTotalBook(Integer totalBook) {
+        this.totalBook = totalBook;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
     public Set<Genre> getGenres() {
         return genres;
     }
@@ -135,14 +156,7 @@ public class Book {
         this.genres = genres;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
+    @JsonIgnore
     public Set<Comment> getComments() {
         return comments;
     }
@@ -151,12 +165,22 @@ public class Book {
         this.comments = comments;
     }
 
+    @JsonIgnore
     public Set<React> getReacts() {
         return reacts;
     }
 
     public void setReacts(Set<React> reacts) {
         this.reacts = reacts;
+    }
+
+    @JsonIgnore
+    public Set<Bill> getBill() {
+        return bill;
+    }
+
+    public void setBill(Set<Bill> bill) {
+        this.bill = bill;
     }
 
     public void addgenre(Genre genre) {

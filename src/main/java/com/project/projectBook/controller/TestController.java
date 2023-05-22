@@ -34,20 +34,9 @@ public class TestController {
     public ResponseEntity<?> userAccess(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        long userId = userDetails.getId();
-        User user = userRepository.findById(userId).get();
-
-
-        List<BookDto> bookDtos = user.getBooks().stream().map((book -> {
-            BookDto bookDto = modelMapper.map(book, BookDto.class);
-
-            bookDto.setUserId(userId);
-            bookDto.setUsername(userDetails.getUsername());
-            return bookDto;
-        })).collect(Collectors.toList());
 
         return ResponseEntity.ok(
-                bookDtos
+                userDetails
         );
     }
 }
