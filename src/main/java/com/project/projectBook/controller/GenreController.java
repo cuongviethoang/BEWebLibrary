@@ -34,6 +34,8 @@ public class GenreController {
         return new ResponseEntity<>(genres, HttpStatus.OK);
     }
 
+
+
     @GetMapping("/genre/{id}")
     public ResponseEntity<Genre> getOneGenre(@PathVariable(value = "id") Long id) {
         Genre genre = genreReporitory.findById(id)

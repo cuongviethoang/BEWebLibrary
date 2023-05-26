@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @CrossOrigin
@@ -39,7 +41,10 @@ public class BillController {
     @GetMapping("/show")
     public ResponseEntity<?> showBill(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return new ResponseEntity<>(billService.showBill(userDetails.getId()), HttpStatus.OK);
+        List<BillDto> billDtos = billService.showBill(userDetails.getId());
+        Collections.sort(billDtos, Comparator.comparing(BillDto::getTime).reversed());
+        Collections.sort(billDtos, Comparator.comparing(BillDto::getDate).reversed());
+        return new ResponseEntity<>(billDtos, HttpStatus.OK);
     }
 
     // http://localhost:8082/api/bill/book/{id}/stats

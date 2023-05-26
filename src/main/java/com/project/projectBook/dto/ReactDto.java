@@ -14,10 +14,12 @@ public class ReactDto implements Serializable {
     private Long userId;
     private String username;
 
+    private String imgUser;
+
     public ReactDto() {
     }
 
-    public ReactDto(Long id, Integer voted, String message, LocalDate date, LocalTime time, Long bookId, Long userId, String username) {
+    public ReactDto(Long id, Integer voted, String message, LocalDate date, LocalTime time, Long bookId, Long userId, String username, String imgUser) {
         this.id = id;
         this.voted = voted;
         this.message = message;
@@ -26,6 +28,7 @@ public class ReactDto implements Serializable {
         this.bookId = bookId;
         this.userId = userId;
         this.username = username;
+        this.imgUser = imgUser;
     }
 
     public Long getId() {
@@ -90,5 +93,13 @@ public class ReactDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getImgUser() {
+        return imgUser;
+    }
+
+    public void setImgUser(String imgUser) {
+        this.imgUser = imgUser;
     }
 }

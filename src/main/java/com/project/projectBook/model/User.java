@@ -35,6 +35,9 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @Column(name = "img")
+    private String imgProfile;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
         joinColumns = @JoinColumn(name="user_id"),
@@ -53,6 +56,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<React> reacts = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Tym> tyms;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Cart> carts;
 
     public User() {
     }
@@ -95,6 +106,14 @@ public class User {
         this.password = password;
     }
 
+    public String getImgProfile() {
+        return imgProfile;
+    }
+
+    public void setImgProfile(String imgProfile) {
+        this.imgProfile = imgProfile;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -130,5 +149,21 @@ public class User {
         this.bills = bills;
     }
 
+    @JsonIgnore
+    public Set<Tym> getTyms() {
+        return tyms;
+    }
 
+    public void setTyms(Set<Tym> tyms) {
+        this.tyms = tyms;
+    }
+
+    @JsonIgnore
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
 }

@@ -41,6 +41,7 @@ public class ReactServiceImpl implements ReactService {
                     reactDto.setBookId(react.getBook().getId());
                     reactDto.setUserId(react.getUser().getId());
                     reactDto.setUsername(react.getUser().getUsername());
+                    reactDto.setImgUser(react.getUser().getImgProfile());
                     return reactDto;
                 }).collect(Collectors.toList());
         Collections.sort(reactDtos, Comparator.comparing(ReactDto::getTime).reversed());

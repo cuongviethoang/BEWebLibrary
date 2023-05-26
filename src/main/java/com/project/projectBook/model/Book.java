@@ -63,6 +63,14 @@ public class Book {
     @JsonIgnore
     private Set<React> reacts = new HashSet<>();
 
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Tym> tyms;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Cart> carts;
+
     public Book() {
     }
 
@@ -181,6 +189,24 @@ public class Book {
 
     public void setBill(Set<Bill> bill) {
         this.bill = bill;
+    }
+
+    @JsonIgnore
+    public Set<Tym> getTyms() {
+        return tyms;
+    }
+
+    public void setTyms(Set<Tym> tyms) {
+        this.tyms = tyms;
+    }
+
+    @JsonIgnore
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 
     public void addgenre(Genre genre) {

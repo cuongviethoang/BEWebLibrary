@@ -53,7 +53,7 @@ public class ReactController {
 
     }
 
-    // http://localhost:8082/api//{id}/react/{id}
+    // http://localhost:8082/api/book/{id}/react/{id}
     @DeleteMapping("/book/{bookId}/react/{reactId}")
     public ResponseEntity<?> deteleReactOfBook(Authentication authentication,
            @PathVariable(value = "bookId") Long bookId,
@@ -64,9 +64,11 @@ public class ReactController {
         React react = reactRepository.findById(reactId).get();
         long userID = react.getUser().getId();
         if(userID == userId) {
-            reactRepository.deleteById(reactId);
+            reactRepository.delete(react);
             return ResponseEntity.ok(new MessageResponse("Success"));
         }
-        return ResponseEntity.ok(new MessageResponse("you are not the person who wrote this comment"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Đây không phải đánh giá của bạn"));
+
+
     }
 }

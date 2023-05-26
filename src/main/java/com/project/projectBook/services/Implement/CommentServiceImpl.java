@@ -41,6 +41,7 @@ public class CommentServiceImpl  implements CommentService {
                     commentDto.setBookId(comment.getBook().getId());
                     commentDto.setUserId(comment.getUser().getId());
                     commentDto.setUsername(comment.getUser().getUsername());
+                    commentDto.setImgUser(comment.getUser().getImgProfile());
                     return commentDto;
                 }).collect(Collectors.toList());
         Collections.sort(commentDtos, Comparator.comparing(CommentDto::getTime).reversed());

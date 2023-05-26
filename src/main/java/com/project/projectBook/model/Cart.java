@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "bill")
-public class Bill {
+@Table(name = "cart")
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,15 +40,7 @@ public class Bill {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Book book;
 
-    public Bill() {
-    }
-
-    public Bill(LocalDate date, LocalTime time, Long usedBuy, String address, String sdt) {
-        this.date = date;
-        this.time = time;
-        this.usedBuy = usedBuy;
-        this.address = address;
-        this.sdt = sdt;
+    public Cart() {
     }
 
     public Long getId() {

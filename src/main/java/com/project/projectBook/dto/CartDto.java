@@ -1,10 +1,9 @@
 package com.project.projectBook.dto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class BillDto implements Serializable {
+public class CartDto {
     private Long id;
     private LocalDate date;
     private LocalTime time;
@@ -28,22 +27,8 @@ public class BillDto implements Serializable {
 
     private Long totalPrice;
 
-    public BillDto() {
+    public CartDto() {
     }
-
-//    public BillDto(Long id, LocalDate date, LocalTime time, Long usedBuy, Long idUser,String username, Long idBook, String bookTitle, String img, Long price, Long totalPrice) {
-//        this.id = id;
-//        this.date = date;
-//        this.time = time;
-//        this.idUser = idUser;
-//        this.username = username;
-//        this.idBook = idBook;
-//        this.bookTitle = bookTitle;
-//        this.usedBuy = usedBuy;
-//        this.img = img;
-//        this.price = price;
-//        this.totalPrice = totalPrice;
-//    }
 
     public Long getId() {
         return id;
@@ -67,8 +52,6 @@ public class BillDto implements Serializable {
 
     public void setTime(LocalTime time) {
         this.time = time;
-
-
     }
 
     public Long getUsedBuy() {
@@ -115,19 +98,16 @@ public class BillDto implements Serializable {
         return idBook;
     }
 
-
-
     public void setIdBook(Long idBook) {
         this.idBook = idBook;
     }
 
+    public String getBookTitle() {
+        return bookTitle;
+    }
 
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
-    }
-
-    public String getBookTitle() {
-        return bookTitle;
     }
 
     public String getImg() {

@@ -22,7 +22,7 @@ public class FileController {
 
     private final Path root = Paths.get("Pics");
 
-    // http://localhost:8082/api/file/getImg?path:ten anhr.jpg
+    // http://localhost:8082/api/file/getImg?path=ten anhr.jpg
     @GetMapping(
             value = "getImg",
             produces = MediaType.IMAGE_JPEG_VALUE

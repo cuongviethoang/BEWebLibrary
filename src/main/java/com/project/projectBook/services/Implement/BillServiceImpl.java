@@ -44,6 +44,8 @@ public class BillServiceImpl implements BillService {
         bill.setUser(user);
         bill.setBook(book);
         bill.setUsedBuy(billDto.getUsedBuy());
+        bill.setSdt(billDto.getSdt());
+        bill.setAddress(billDto.getAddress());
         bill.setDate(LocalDate.now());
         LocalTime tm = LocalTime.now();
         bill.setTime(LocalTime.parse(String.format("%02d:%02d:%02d", tm.getHour(), tm.getMinute(), tm.getSecond())));
@@ -54,11 +56,15 @@ public class BillServiceImpl implements BillService {
     public List<BillDto> showBill(Long userId) {
         User user = userRepository.findById(userId).get();
         return user.getBills().stream().map((bill -> {
+            long total = 0;
+            total = bill.getUsedBuy() * bill.getBook().getPrice();
             BillDto billDto = modelMapper.map(bill, BillDto.class);
             billDto.setId(bill.getId());
             billDto.setIdBook(bill.getBook().getId());
             billDto.setBookTitle(bill.getBook().getTitle());
             billDto.setImg(bill.getBook().getImgBook());
+            billDto.setPrice(bill.getBook().getPrice());
+            billDto.setTotalPrice(total);
             billDto.setIdUser(userId);
             billDto.setUsername(user.getUsername());
             return billDto;

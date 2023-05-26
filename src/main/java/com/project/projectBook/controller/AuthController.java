@@ -47,6 +47,7 @@ public class AuthController {
     JwtUtils jwtUtils;
 
 
+    // http://localhost:8082/api/auth/signin
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -73,6 +74,7 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
+                userDetails.getImgProfile(),
                 roles));
     }
 

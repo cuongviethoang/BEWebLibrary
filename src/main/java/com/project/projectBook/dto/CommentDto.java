@@ -15,10 +15,12 @@ public class CommentDto implements Serializable {
     private Long userId;
     private String username;
 
+    private String imgUser;
+
     public CommentDto() {
     }
 
-    public CommentDto(Long id, String content, LocalDate date, LocalTime time, Long bookId, Long userId, String username) {
+    public CommentDto(Long id, String content, LocalDate date, LocalTime time, Long bookId, Long userId, String username, String imgUser) {
         this.id = id;
         this.content = content;
         this.date = date;
@@ -26,6 +28,7 @@ public class CommentDto implements Serializable {
         this.bookId = bookId;
         this.userId = userId;
         this.username = username;
+        this.imgUser = imgUser;
     }
 
     public Long getId() {
@@ -82,5 +85,13 @@ public class CommentDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getImgUser() {
+        return imgUser;
+    }
+
+    public void setImgUser(String imgUser) {
+        this.imgUser = imgUser;
     }
 }

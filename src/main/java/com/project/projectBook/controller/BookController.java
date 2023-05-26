@@ -52,11 +52,25 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
+    // http://localhost:8082/api/books/genre/{id}
+    @GetMapping("/books/genre/{id}")
+    public  ResponseEntity<?> getAllBookOfGenre(@PathVariable(value = "id") Long id) {
+        List<Book> books = bookRepository.findBooksByGenresId(id);
+        return ResponseEntity.ok(books);
+    }
+
     // http://localhost:8082/api/books/stats
     @GetMapping("/books/stats")
     public ResponseEntity<?> getStatAllBook() {
         List<BuyBookDto> buyBookDtos = bookService.buyBookDtos();
         return ResponseEntity.ok(buyBookDtos);
+    }
+
+    // http://localhost:8082/api/books/findBook?title=
+    @GetMapping("/books/findBook")
+    public  ResponseEntity<?> getAllBookToInput(@RequestParam String title) {
+        List<Book> books = bookRepository.findAllBookToInput(title);
+        return ResponseEntity.ok(books);
     }
 
     // http://localhost:8082/api/book
@@ -75,7 +89,7 @@ public class BookController {
         return new ResponseEntity<>(bk, HttpStatus.OK);
     }
 
-    // http://localhost:8082/api/book/sold/{id}
+    // http://localhost:8082/api/book/{id}/sold
     @PutMapping("/book/{id}/sold")
     public ResponseEntity<Book> buyBook( @PathVariable(value = "id") Long id, @RequestBody Book book) {
         Book bk = bookRepository.findById(id)
