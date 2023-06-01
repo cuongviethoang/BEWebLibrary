@@ -36,6 +36,7 @@ public class FileController {
     }
 
     // http://localhost:8082/api/file/upload
+    @CrossOrigin
     @PostMapping("upload")
     public ResponseEntity<?> uploadFile(@RequestParam(value = "files", required = false) MultipartFile[] files ) {
 

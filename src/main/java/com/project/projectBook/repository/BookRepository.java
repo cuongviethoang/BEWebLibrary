@@ -28,6 +28,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Book b set b.title = ?2, b.author = ?3, b.releaseDate = ?4, b.length = ?5, b.sold = ?6, b.totalBook = ?7, b.price = ?8 where b.id = ?1")
-    void fixOneBook(Long id, String title, String author, String date, Integer length, Integer sold, Integer totalBook, Long price);
+    @Query("UPDATE Book b set b.title = ?2, b.author = ?3, b.releaseDate = ?4, b.length = ?5, b.totalBook = ?6, b.price = ?7, b.sold = ?8 where b.id = ?1")
+    void fixOneBook(Long id, String title, String author, String date, Integer length, Long totalBook, Long price, Integer sold);
 }

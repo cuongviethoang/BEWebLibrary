@@ -34,7 +34,7 @@ public class Book {
     private String imgBook;
 
     @Column(name = "totalbook")
-    private Integer totalBook;
+    private Long totalBook;
 
     @Column(name = "price")
     private Long price;
@@ -74,7 +74,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author, String releaseDate, Integer length, Integer sold, Long price, int totalBook) {
+    public Book(String title, String author, String releaseDate, Integer length, Integer sold, Long price, Long totalBook) {
         this.title = title;
         this.author = author;
         this.releaseDate = releaseDate;
@@ -140,11 +140,11 @@ public class Book {
         this.imgBook = imgBook;
     }
 
-    public Integer getTotalBook() {
+    public Long getTotalBook() {
         return totalBook;
     }
 
-    public void setTotalBook(Integer totalBook) {
+    public void setTotalBook(Long totalBook) {
         this.totalBook = totalBook;
     }
 

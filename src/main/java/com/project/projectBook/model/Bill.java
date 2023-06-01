@@ -22,7 +22,7 @@ public class Bill {
     private LocalTime time;
 
     @Column(name = "number")
-    private Long usedBuy;
+    private Integer usedBuy;
 
     @Column(name = "address")
     private String address;
@@ -43,7 +43,7 @@ public class Bill {
     public Bill() {
     }
 
-    public Bill(LocalDate date, LocalTime time, Long usedBuy, String address, String sdt) {
+    public Bill(LocalDate date, LocalTime time, Integer usedBuy, String address, String sdt) {
         this.date = date;
         this.time = time;
         this.usedBuy = usedBuy;
@@ -75,11 +75,11 @@ public class Bill {
         this.time = time;
     }
 
-    public Long getUsedBuy() {
+    public Integer getUsedBuy() {
         return usedBuy;
     }
 
-    public void setUsedBuy(Long usedBuy) {
+    public void setUsedBuy(Integer usedBuy) {
         this.usedBuy = usedBuy;
     }
 

@@ -57,24 +57,19 @@ public class GenreController {
 
     // http://localhost:8082/api/book/{id}/genre
     @PostMapping("/book/{bookId}/genre")
-    public ResponseEntity<Genre> addGenre(@PathVariable(value = "bookId") Long bookId, @RequestBody Genre genreRequest) {
-        Genre genre = bookRepository.findById(bookId).map(book -> {
-            if(genreRequest.getId() == null) {
-                Genre genre1 = new Genre(genreRequest.getName());
-                book.addgenre(genre1);
-                return genreReporitory.save(genre1);
-            }
-            else {
-            Long genreId = genreRequest.getId();
-                Genre _genre = genreReporitory.findById(genreId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Not found Gener with id of gener to post for movie= " + genreId));
-                book.addgenre(_genre);
-                bookRepository.save(book);
-                return _genre;
-            }
-
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = " + bookId));
-        return new ResponseEntity<>(genre, HttpStatus.CREATED);
+    public ResponseEntity<?> addGenre(@PathVariable(value = "bookId") Long bookId, @RequestBody Genre genreRequest) {
+        Book book = bookRepository.findById(bookId).get();
+        Genre genre = genreReporitory.findGenreByName(genreRequest.getName());
+        if(genre == null) {
+            Genre genre1 = new Genre(genreRequest.getName());
+            book.addgenre(genre1);
+            genreReporitory.save(genre1);
+        }
+        else {
+            book.addgenre(genre);
+            bookRepository.save(book);
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping("/genre/{id}")

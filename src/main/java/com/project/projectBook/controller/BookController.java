@@ -1,8 +1,10 @@
 package com.project.projectBook.controller;
 
 import com.project.projectBook.dto.BookDto;
+import com.project.projectBook.dto.BookReactDto;
 import com.project.projectBook.dto.BuyBookDto;
 import com.project.projectBook.exception.ResourceNotFoundException;
+import com.project.projectBook.model.Bill;
 import com.project.projectBook.model.Book;
 import com.project.projectBook.model.User;
 import com.project.projectBook.repository.BookRepository;
@@ -35,7 +37,7 @@ public class BookController {
     BookService bookService;
 
 
-
+    // Lấy ra chi tiết thông tin tất cả  quyển sách
     // http://localhost:8082/api/books
     @GetMapping("/books")
     public ResponseEntity<List<Book>> getAllBooks() {
@@ -43,6 +45,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    // Lấy ra thông tin 1 quyển sách theo id
     // http://localhost:8082/api/book/{id}
     @GetMapping("/book/{id}")
     public ResponseEntity<Book> getOneBook(@PathVariable(value = "id") Long id ) {
@@ -52,6 +55,15 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
+    // Lấy ra thông tin như trung bình đánh giá, lượt tym, lượt comment của 1 quyển sách theo id
+    // http://localhost:8082/api/book/{id}/count
+    @GetMapping("/book/{id}/count")
+    public ResponseEntity<?> getCountOfBook(@PathVariable(value = "id") Long id) {
+        BookReactDto bookReactDto = bookService.getBookReact(id);
+        return ResponseEntity.ok(bookReactDto);
+    }
+
+    // Lấy ra thể loại của tất cả sách của 1 thể loại
     // http://localhost:8082/api/books/genre/{id}
     @GetMapping("/books/genre/{id}")
     public  ResponseEntity<?> getAllBookOfGenre(@PathVariable(value = "id") Long id) {
@@ -59,6 +71,7 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    // Thống kê số sách đã bán số sách còn, tổng tiền đã bán cảu tất cả quyển sách
     // http://localhost:8082/api/books/stats
     @GetMapping("/books/stats")
     public ResponseEntity<?> getStatAllBook() {
@@ -66,6 +79,7 @@ public class BookController {
         return ResponseEntity.ok(buyBookDtos);
     }
 
+    // Tìm tên của 1 quyển sách
     // http://localhost:8082/api/books/findBook?title=
     @GetMapping("/books/findBook")
     public  ResponseEntity<?> getAllBookToInput(@RequestParam String title) {
@@ -73,6 +87,7 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    // Thêm 1 quyển sách
     // http://localhost:8082/api/book
     @PostMapping("/book")
     public ResponseEntity<?> createBook(@RequestBody Book book) {
@@ -81,7 +96,8 @@ public class BookController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    //
+    // Sửa thông tin của 1 quyển sách
+    // http://localhost:8082/api/book/{id}
     @PutMapping("/book/{id}")
     public ResponseEntity<Book> fixBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
         Book bk = bookService.fixOneBook(id, book);
@@ -89,6 +105,7 @@ public class BookController {
         return new ResponseEntity<>(bk, HttpStatus.OK);
     }
 
+    // Sửa lại ố lượng sách còn lại trong kho và cập nhật số sách đã bán
     // http://localhost:8082/api/book/{id}/sold
     @PutMapping("/book/{id}/sold")
     public ResponseEntity<Book> buyBook( @PathVariable(value = "id") Long id, @RequestBody Book book) {
@@ -102,6 +119,23 @@ public class BookController {
         return new ResponseEntity<>(bk, HttpStatus.OK);
     }
 
+    // Gọi api này khi xóa bill sẽ cập nhật lại số ách đã mua vào lại kho
+    // http://localhost:8082/api/book/{id}/delbill
+    @PutMapping("/book/{id}/delbill")
+    public ResponseEntity<Book> delBill(@PathVariable(value = "id") Long id, @RequestBody Bill bill) {
+        Book bk = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id = " + id));
+
+        bk.setSold(bk.getSold() - bill.getUsedBuy());
+        bk.setTotalBook(bk.getTotalBook() + bill.getUsedBuy());
+        bookRepository.save(bk);
+
+        return new ResponseEntity<>(bk, HttpStatus.OK);
+    }
+
+
+    // Xóa 1 quyển sách theo id;
+    // http://localhost:8082/api/book/{id}
     @DeleteMapping("/book/{id}")
     public ResponseEntity<HttpStatus> deleteBook(@PathVariable(value = "id") Long id) {
         Book book = bookRepository.findById(id)
@@ -112,7 +146,9 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // Thay ảnh của 1 cuốn sách
     // http://localhost:8082/api/book/{id}/bookImg
+    @CrossOrigin
     @PostMapping("/book/{id}/bookImg")
     public ResponseEntity<?> postImgBook(@PathVariable(value = "id") Long id, @RequestParam String img) {
         bookRepository.uploadImg(id, img);

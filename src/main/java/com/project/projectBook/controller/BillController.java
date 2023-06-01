@@ -2,7 +2,9 @@ package com.project.projectBook.controller;
 
 
 import com.project.projectBook.dto.BillDto;
+import com.project.projectBook.model.Bill;
 import com.project.projectBook.model.Book;
+import com.project.projectBook.repository.BillRepository;
 import com.project.projectBook.repository.BookRepository;
 import com.project.projectBook.services.BillService;
 import com.project.projectBook.services.UserDetailsImpl;
@@ -29,6 +31,9 @@ public class BillController {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    BillRepository billRepository;
+
     // http://localhost:8082/api/bill/book/{id}
     @PostMapping("/book/{bookId}")
     public ResponseEntity<?> createBill(Authentication authentication, @PathVariable(value = "bookId") Long bookId, @RequestBody BillDto billDto) {
@@ -52,5 +57,13 @@ public class BillController {
     public ResponseEntity<?> getAllBillOfBook(@PathVariable(name = "bookId") Long bookId) {
         List<BillDto> billDtos = billService.getAllBillOfBook(bookId);
         return ResponseEntity.ok(billDtos);
+    }
+
+    // http://localhost:8082/api/bill/{id}
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<?> deleteBill(@PathVariable(name = "id") Long id) {
+        Bill bill = billRepository.findById(id).get();
+        billRepository.delete(bill);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 }

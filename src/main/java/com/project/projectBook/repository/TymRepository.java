@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface TymRepository extends JpaRepository<Tym, Long> {
 
     Tym findTymByUserId(Long userId);
+
+    List<Tym> findTymByBookId(Long bookId);
 }

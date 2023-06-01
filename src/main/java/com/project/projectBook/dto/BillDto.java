@@ -9,7 +9,7 @@ public class BillDto implements Serializable {
     private LocalDate date;
     private LocalTime time;
 
-    private Long usedBuy;
+    private Integer usedBuy;
 
     private String address;
 
@@ -71,11 +71,11 @@ public class BillDto implements Serializable {
 
     }
 
-    public Long getUsedBuy() {
+    public Integer getUsedBuy() {
         return usedBuy;
     }
 
-    public void setUsedBuy(Long usedBuy) {
+    public void setUsedBuy(Integer usedBuy) {
         this.usedBuy = usedBuy;
     }
 
