@@ -31,20 +31,6 @@ public class BillDto implements Serializable {
     public BillDto() {
     }
 
-//    public BillDto(Long id, LocalDate date, LocalTime time, Long usedBuy, Long idUser,String username, Long idBook, String bookTitle, String img, Long price, Long totalPrice) {
-//        this.id = id;
-//        this.date = date;
-//        this.time = time;
-//        this.idUser = idUser;
-//        this.username = username;
-//        this.idBook = idBook;
-//        this.bookTitle = bookTitle;
-//        this.usedBuy = usedBuy;
-//        this.img = img;
-//        this.price = price;
-//        this.totalPrice = totalPrice;
-//    }
-
     public Long getId() {
         return id;
     }

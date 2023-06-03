@@ -83,6 +83,8 @@ public class BillServiceImpl implements BillService {
                     billDto.setImg(bill.getBook().getImgBook());
                     billDto.setIdUser(bill.getUser().getId());
                     billDto.setUsername(bill.getUser().getUsername());
+                    billDto.setPrice(bill.getBook().getPrice());
+                    billDto.setTotalPrice(bill.getUsedBuy() * bill.getBook().getPrice());
                     return billDto;
                 }).collect(Collectors.toList());
         return billDtos;

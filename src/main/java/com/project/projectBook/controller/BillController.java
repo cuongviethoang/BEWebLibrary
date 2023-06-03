@@ -34,6 +34,8 @@ public class BillController {
     @Autowired
     BillRepository billRepository;
 
+
+    // Tạo bill
     // http://localhost:8082/api/bill/book/{id}
     @PostMapping("/book/{bookId}")
     public ResponseEntity<?> createBill(Authentication authentication, @PathVariable(value = "bookId") Long bookId, @RequestBody BillDto billDto) {
@@ -42,6 +44,7 @@ public class BillController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    //Lấy ra tất cả bill mà mỗi một người dùng đã mua
     // http://localhost:8082/api/bill/show
     @GetMapping("/show")
     public ResponseEntity<?> showBill(Authentication authentication) {
@@ -52,7 +55,9 @@ public class BillController {
         return new ResponseEntity<>(billDtos, HttpStatus.OK);
     }
 
+    // Thống kê tất cả bill đã bán của một cuốn sách
     // http://localhost:8082/api/bill/book/{id}/stats
+    @CrossOrigin
     @GetMapping("/book/{bookId}/stats")
     public ResponseEntity<?> getAllBillOfBook(@PathVariable(name = "bookId") Long bookId) {
         List<BillDto> billDtos = billService.getAllBillOfBook(bookId);
