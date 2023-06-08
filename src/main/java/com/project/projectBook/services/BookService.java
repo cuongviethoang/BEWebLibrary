@@ -16,5 +16,5 @@ public interface BookService {
 
     void createBook( Book book); // tạo 1 quyển sách
 
-    Book fixOneBook(Long id, Book book); // Sửa thông tin 1 quyển sách
+    void fixOneBook(Long id, Book book); // Sửa thông tin 1 quyển sách
 }

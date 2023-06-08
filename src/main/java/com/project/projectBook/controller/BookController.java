@@ -7,6 +7,7 @@ import com.project.projectBook.exception.ResourceNotFoundException;
 import com.project.projectBook.model.Bill;
 import com.project.projectBook.model.Book;
 import com.project.projectBook.model.User;
+import com.project.projectBook.payload.response.MessageResponse;
 import com.project.projectBook.repository.BookRepository;
 import com.project.projectBook.repository.UserRepository;
 import com.project.projectBook.services.BookService;
@@ -91,6 +92,9 @@ public class BookController {
     // http://localhost:8082/api/book
     @PostMapping("/book")
     public ResponseEntity<?> createBook(@RequestBody Book book) {
+        if(bookRepository.existsByTitle(book.getTitle())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Tên sách đã tồn tại trong csdl"));
+        }
         bookService.createBook(book);
 
         return ResponseEntity.ok(HttpStatus.OK);
@@ -99,10 +103,9 @@ public class BookController {
     // Sửa thông tin của 1 quyển sách
     // http://localhost:8082/api/book/{id}
     @PutMapping("/book/{id}")
-    public ResponseEntity<Book> fixBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
-        Book bk = bookService.fixOneBook(id, book);
-
-        return new ResponseEntity<>(bk, HttpStatus.OK);
+    public ResponseEntity<?> fixBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
+        bookService.fixOneBook(id, book);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     // Sửa lại ố lượng sách còn lại trong kho và cập nhật số sách đã bán

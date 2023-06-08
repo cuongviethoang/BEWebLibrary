@@ -19,8 +19,7 @@ public class Genre {
 
     @ManyToMany(fetch = FetchType.LAZY,
     cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
+            CascadeType.MERGE
     },
         mappedBy = "genres"
     )

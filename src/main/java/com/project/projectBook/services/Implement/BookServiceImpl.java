@@ -5,6 +5,7 @@ import com.project.projectBook.dto.BookReactDto;
 import com.project.projectBook.dto.BuyBookDto;
 import com.project.projectBook.model.Bill;
 import com.project.projectBook.model.Book;
+import com.project.projectBook.model.Genre;
 import com.project.projectBook.model.React;
 import com.project.projectBook.repository.*;
 import com.project.projectBook.services.BookService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -95,19 +97,29 @@ public class BookServiceImpl implements BookService {
         bk.setSold(0);
         bk.setImgBook(book.getImgBook());
         bk.setPrice(book.getPrice());
+        bk.setOverview(book.getOverview());
         bk.setLength(book.getLength());
         bk.setReleaseDate(book.getReleaseDate());
         bk.setAuthor(book.getAuthor());
+        Set<Genre> genreSet = book.getGenres();
+        bk.setGenres(genreSet);
         bookRepository.save(bk);
     }
 
     @Override
-    public Book fixOneBook(Long id, Book book) {
-        bookRepository.fixOneBook(id, book.getTitle(), book.getAuthor(), book.getReleaseDate(),
-                book.getLength(), book.getTotalBook(), book.getPrice(), book.getSold());
+    public void fixOneBook(Long id, Book book) {
         Book bk = bookRepository.findById(id).get();
-        return  bk;
+        bk.setTitle(book.getTitle());
+        bk.setTotalBook(book.getTotalBook());
+        bk.setSold(book.getSold());
+        bk.setImgBook(book.getImgBook());
+        bk.setPrice(book.getPrice());
+        bk.setOverview(book.getOverview());
+        bk.setLength(book.getLength());
+        bk.setReleaseDate(book.getReleaseDate());
+        bk.setAuthor(book.getAuthor());
+        Set<Genre> genreSet = book.getGenres();
+        bk.setGenres(genreSet);
+        bookRepository.save(bk);
     }
-
-
 }

@@ -30,6 +30,10 @@ public class Book {
     @Column(name="sold")
     private Integer sold;
 
+    @Lob
+    @Column(name = "overview")
+    private String overview;
+
     @Column(name = "img")
     private String imgBook;
 
@@ -41,8 +45,7 @@ public class Book {
 
     @ManyToMany(fetch = FetchType.LAZY,
         cascade = {
-            CascadeType.MERGE,
-                CascadeType.PERSIST
+            CascadeType.MERGE
         }
     )
     @JoinTable(name = "book_geners",
@@ -74,14 +77,16 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author, String releaseDate, Integer length, Integer sold, Long price, Long totalBook) {
+    public Book(String title, String author, String releaseDate, Integer length, Integer sold,String overview, Long price, Long totalBook,Set<Genre> genres ) {
         this.title = title;
         this.author = author;
         this.releaseDate = releaseDate;
         this.length = length;
         this.sold = sold;
+        this.overview = overview;
         this.price = price;
         this.totalBook = totalBook;
+        this.genres = genres;
     }
 
     public Long getId() {
@@ -156,6 +161,14 @@ public class Book {
         this.price = price;
     }
 
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
     public Set<Genre> getGenres() {
         return genres;
     }
@@ -163,6 +176,7 @@ public class Book {
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
     }
+
 
     @JsonIgnore
     public Set<Comment> getComments() {

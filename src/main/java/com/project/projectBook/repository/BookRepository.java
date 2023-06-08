@@ -15,6 +15,8 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByGenresId(Long genreId);
 
+    Boolean existsByTitle(String title);
+
     @Modifying
     @Transactional
     @Query("UPDATE Book bk SET bk.imgBook = :path WHERE bk.id = :id")
@@ -26,8 +28,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.title like %:title% ")
     List<Book> findAllBookToInput(@Param("title") String title);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Book b set b.title = ?2, b.author = ?3, b.releaseDate = ?4, b.length = ?5, b.totalBook = ?6, b.price = ?7, b.sold = ?8 where b.id = ?1")
-    void fixOneBook(Long id, String title, String author, String date, Integer length, Long totalBook, Long price, Integer sold);
+
 }
